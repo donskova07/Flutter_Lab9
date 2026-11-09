@@ -22,7 +22,14 @@ class _SlotMachineState extends State<SlotMachine> {
   var _slot3 = _seven;
   var _message = '';
 
+
   void _spin() {
+    if (_coins <= 0) {
+      setState(() {
+        _message = 'Монеты закончились! 🛑';
+      });
+      return;
+    }
     setState(() {
       _slot1 = _symbols[_random.nextInt(_symbols.length)];
       _slot2 = _symbols[_random.nextInt(_symbols.length)];
@@ -30,11 +37,22 @@ class _SlotMachineState extends State<SlotMachine> {
 
       if (_slot1 == _slot2 && _slot2 == _slot3) {
         _coins += 3;
-        _message = 'Победа! � +3 монеты';
+        _message = 'Победа! +3 монеты';
       } else {
         _coins -= 1;
-        _message = 'Попробуй ещё раз � -1 монета';
+        _message = _coins == 0 ? 'Монеты закончились! �' : 'Попробуй ещё раз � -1 монета';
       }
+    });
+  }
+
+  
+  void _reset() {
+    setState(() {
+      _coins = 10;
+      _slot1 = _cherry;
+      _slot2 = _lemon;
+      _slot3 = _seven;
+      _message = '';
     });
   }
 
@@ -43,8 +61,9 @@ class _SlotMachineState extends State<SlotMachine> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        
         Text(
-          '🪙 Монеты: $_coins',
+          '� Монеты: $_coins',
           style: const TextStyle(
             fontSize: 28,
             color: Colors.white,
@@ -52,6 +71,8 @@ class _SlotMachineState extends State<SlotMachine> {
           ),
         ),
         const SizedBox(height: 40),
+        
+       
         FittedBox(
           fit: BoxFit.scaleDown,
           child: Row(
@@ -66,14 +87,18 @@ class _SlotMachineState extends State<SlotMachine> {
           ),
         ),
         const SizedBox(height: 24),
+        
+        
         Text(
           _message,
           textAlign: TextAlign.center,
           style: const TextStyle(fontSize: 20, color: Colors.white),
         ),
         const SizedBox(height: 40),
+        
+        
         ElevatedButton(
-          onPressed: _spin,
+          onPressed: _coins > 0 ? _spin : null,
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.amber,
             padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
@@ -87,6 +112,17 @@ class _SlotMachineState extends State<SlotMachine> {
             ),
           ),
         ),
+        
+       
+        const SizedBox(height: 12),
+        TextButton(
+          onPressed: _reset,
+          child: const Text(
+            'Начать заново',
+            style: TextStyle(color: Colors.white, fontSize: 16),
+          ),
+        ),
+        
       ],
     );
   }
