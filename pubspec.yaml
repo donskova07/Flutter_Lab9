@@ -26,10 +26,11 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  ets:
- - assets/images/cherry.png
- - assets/images/lemon.png
- - assets/images/seven.png
+
+  assets:
+    - assets/images/cherry.png
+    - assets/images/lemon.png
+    - assets/images/seven.png
 
 
   
